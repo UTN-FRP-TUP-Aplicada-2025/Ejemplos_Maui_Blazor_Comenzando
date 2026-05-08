@@ -1,0 +1,14 @@
+<Project>
+  <!--
+    Redirige las carpetas intermedias (obj) y de salida (bin) a una ruta corta
+    para evitar el problema de longitud máxima de ruta en Windows (MAX_PATH = 260),
+    que provocaba errores APT2098/APT2261 de Aapt2 y fallos de ScopedCss al construir
+    el proyecto MAUI Blazor desde una carpeta muy anidada.
+  -->
+  <PropertyGroup>
+    <_ShortBuildRoot>C:\mb\$(MSBuildProjectName)\</_ShortBuildRoot>
+    <BaseIntermediateOutputPath>$(_ShortBuildRoot)obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(_ShortBuildRoot)bin\</BaseOutputPath>
+    <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
+  </PropertyGroup>
+</Project>

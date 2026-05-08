@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/AnatomiaProyectoBlazor/">
+    <Project Path="AnatomiaProyecto/Ejemplo_HolaMundo/Ejemplo_HolaMundo.csproj">
+      <Deploy Solution="Debug|*" />
+    </Project>
+  </Folder>
+  <Folder Name="/Views/">
+    <Project Path="Views/Ejemplo_Views/Ejemplo_Views.csproj" Id="861fca08-53d7-4cb5-8eb9-97e5cf592b2b" />
+  </Folder>
+</Solution>
