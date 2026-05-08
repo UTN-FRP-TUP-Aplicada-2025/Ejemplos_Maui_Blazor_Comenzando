@@ -1,7 +1,19 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
-
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+@label
+
+<button @onclick="OnPruebaClick">Prueba</button>
+
+@code{
+    string label;
+
+    async Task OnPruebaClick()
+    {
+        label = "Prueba"; 
+    }
+}
+

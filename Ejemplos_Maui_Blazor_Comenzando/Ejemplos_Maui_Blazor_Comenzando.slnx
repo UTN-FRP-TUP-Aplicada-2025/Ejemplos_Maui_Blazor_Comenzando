@@ -4,7 +4,12 @@
       <Deploy Solution="Debug|*" />
     </Project>
   </Folder>
+  <Folder Name="/AnatomiaProyectoBlazor/Docs/">
+    <File Path="AnatomiaProyecto/Ejemplo_Docs/Readme.md" />
+  </Folder>
   <Folder Name="/Views/">
-    <Project Path="Views/Ejemplo_Views/Ejemplo_Views.csproj" Id="861fca08-53d7-4cb5-8eb9-97e5cf592b2b" />
+    <Project Path="Views/Ejemplo_Views/Ejemplo_Views.csproj" Id="58730099-6435-4947-8604-ef77fb80fcdc">
+      <Deploy Solution="Debug|*" />
+    </Project>
   </Folder>
 </Solution>
