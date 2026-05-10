@@ -401,6 +401,307 @@ await Shell.Current.GoToAsync("//GridLayoutPage");
 
 O lo más idiomático para web: `<a href="/GridLayoutPage">Ir</a>`.
 
+### 5.1 `FlyoutPage` y `TabbedPage` (MAUI) y sus equivalentes en Hybrid
+
+En MAUI puro existen dos contenedores de navegación de alto nivel muy usados que **no
+tienen un equivalente directo** en Blazor Hybrid (porque la "navegación" pasa a ser
+enrutamiento web). En cambio se reemplazan por **patrones de UI** del stack elegido
+(Bootstrap o MudBlazor) combinados con `NavLink` / `NavigationManager`.
+
+#### 5.1.1 `FlyoutPage` (menú lateral tipo "hamburguesa")
+
+##### MAUI puro
+
+```xml
+<FlyoutPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="MiApp.MainFlyout">
+
+    <FlyoutPage.Flyout>
+        <ContentPage Title="Menú">
+            <CollectionView x:Name="MenuItems" SelectionMode="Single"
+                            SelectionChanged="OnMenuSelected">
+                <CollectionView.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Inicio</x:String>
+                        <x:String>Clientes</x:String>
+                        <x:String>Configuración</x:String>
+                    </x:Array>
+                </CollectionView.ItemsSource>
+            </CollectionView>
+        </ContentPage>
+    </FlyoutPage.Flyout>
+
+    <FlyoutPage.Detail>
+        <NavigationPage>
+            <x:Arguments>
+                <local:HomePage />
+            </x:Arguments>
+        </NavigationPage>
+    </FlyoutPage.Detail>
+</FlyoutPage>
+```
+
+> En la práctica, en apps MAUI nuevas se prefiere `Shell` con `FlyoutItem`, que da el
+> mismo resultado con menos código.
+
+##### Bootstrap (Blazor Hybrid)
+
+Bootstrap no tiene un componente "flyout" como tal: se arma con un **Offcanvas** o con
+un `<div>` posicionado que se abre/cierra con estado, combinado con `NavLink` para los ítems.
+
+```razor
+@inject NavigationManager Nav
+
+<button class="btn btn-primary m-2" @onclick="ToggleMenu">
+    <i class="bi bi-list"></i>
+</button>
+
+<div class="offcanvas offcanvas-start @(_open ? "show" : "")"
+     style="visibility: @(_open ? "visible" : "hidden");"
+     tabindex="-1">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Menú</h5>
+        <button type="button" class="btn-close" @onclick="ToggleMenu"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All"
+                         @onclick="Cerrar">Inicio</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="clientes"
+                         @onclick="Cerrar">Clientes</NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="config"
+                         @onclick="Cerrar">Configuración</NavLink>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@if (_open)
+{
+    <div class="offcanvas-backdrop fade show" @onclick="ToggleMenu"></div>
+}
+
+@code {
+    private bool _open;
+    private void ToggleMenu() => _open = !_open;
+    private void Cerrar() => _open = false;
+}
+```
+
+> Esto suele ir en el `MainLayout.razor` para que esté disponible en todas las páginas.
+> El `<main>` se queda igual; el flyout se superpone.
+
+##### MudBlazor (Blazor Hybrid)
+
+MudBlazor lo resuelve nativamente con `MudDrawer` en variante `Temporary` (cubre el
+contenido como un flyout) o `Responsive` (drawer fijo en pantallas grandes y flyout en chicas).
+
+```razor
+@inherits LayoutComponentBase
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                       Color="Color.Inherit"
+                       Edge="Edge.Start"
+                       OnClick="@(() => _open = !_open)" />
+        <MudText Typo="Typo.h6">Mi App</MudText>
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_open"
+               Variant="DrawerVariant.Temporary"
+               Anchor="Anchor.Left"
+               Elevation="2">
+        <MudNavMenu>
+            <MudNavLink Href="" Match="NavLinkMatch.All"
+                        Icon="@Icons.Material.Filled.Home">Inicio</MudNavLink>
+            <MudNavLink Href="clientes"
+                        Icon="@Icons.Material.Filled.People">Clientes</MudNavLink>
+            <MudNavLink Href="config"
+                        Icon="@Icons.Material.Filled.Settings">Configuración</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer Class="my-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _open;
+}
+```
+
+> Cambiando `DrawerVariant.Temporary` por `DrawerVariant.Responsive` y agregando
+> `Breakpoint="Breakpoint.Md"` se obtiene el comportamiento típico de "menú fijo en
+> escritorio, hamburguesa en mobile" sin código extra.
+
+#### 5.1.2 `TabbedPage` (pestañas de navegación)
+
+##### MAUI puro
+
+```xml
+<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:local="clr-namespace:MiApp.Pages"
+            x:Class="MiApp.MainTabbed">
+    <local:HomePage Title="Inicio" IconImageSource="home.png" />
+    <local:ClientesPage Title="Clientes" IconImageSource="people.png" />
+    <local:ConfigPage Title="Config" IconImageSource="settings.png" />
+</TabbedPage>
+```
+
+> Con `Shell` el equivalente es `TabBar` + `Tab` + `ShellContent`.
+
+Hay dos lecturas del patrón "tabs" que conviene distinguir antes de mostrar los
+equivalentes:
+
+- **Tabs como navegación de páginas**: cada pestaña es una *página/ruta* distinta (lo
+  que hace `TabbedPage`).
+- **Tabs como conmutador de contenido dentro de la misma página**: las pestañas
+  cambian el panel visible sin cambiar de ruta.
+
+##### Bootstrap (Blazor Hybrid)
+
+**Tabs como navegación de páginas** (las pestañas son `NavLink` con clases `nav nav-tabs`):
+
+```razor
+<ul class="nav nav-tabs px-3 pt-2">
+    <li class="nav-item">
+        <NavLink class="nav-link" ActiveClass="active"
+                 href="" Match="NavLinkMatch.All">Inicio</NavLink>
+    </li>
+    <li class="nav-item">
+        <NavLink class="nav-link" ActiveClass="active"
+                 href="clientes">Clientes</NavLink>
+    </li>
+    <li class="nav-item">
+        <NavLink class="nav-link" ActiveClass="active"
+                 href="config">Configuración</NavLink>
+    </li>
+</ul>
+
+<div class="p-3">
+    @Body
+</div>
+```
+
+**Tabs como conmutador de contenido** (estado local, sin cambiar ruta):
+
+```razor
+<ul class="nav nav-tabs">
+    @foreach (var t in _tabs)
+    {
+        <li class="nav-item">
+            <button class="nav-link @(_actual == t ? "active" : "")"
+                    @onclick="() => _actual = t">
+                @t
+            </button>
+        </li>
+    }
+</ul>
+
+<div class="border border-top-0 p-3">
+    @switch (_actual)
+    {
+        case "Inicio":   <p>Contenido de inicio</p>; break;
+        case "Clientes": <p>Listado de clientes</p>; break;
+        case "Config":   <p>Opciones</p>; break;
+    }
+</div>
+
+@code {
+    private string[] _tabs = new[] { "Inicio", "Clientes", "Config" };
+    private string _actual = "Inicio";
+}
+```
+
+> Para una **bottom tab bar** estilo móvil (lo más parecido visualmente a `TabbedPage`
+> en Android/iOS), Bootstrap no trae nada listo: se arma con un `<nav class="navbar fixed-bottom">`
+> conteniendo `NavLink`s.
+
+##### MudBlazor (Blazor Hybrid)
+
+**Tabs como conmutador de contenido** — uso directo de `MudTabs`:
+
+```razor
+<MudTabs Outlined="true" Position="Position.Top" Rounded="true" Border="true">
+    <MudTabPanel Text="Inicio" Icon="@Icons.Material.Filled.Home">
+        <MudText>Contenido de inicio</MudText>
+    </MudTabPanel>
+    <MudTabPanel Text="Clientes" Icon="@Icons.Material.Filled.People">
+        <MudText>Listado de clientes</MudText>
+    </MudTabPanel>
+    <MudTabPanel Text="Config" Icon="@Icons.Material.Filled.Settings">
+        <MudText>Opciones</MudText>
+    </MudTabPanel>
+</MudTabs>
+```
+
+**Tabs como navegación de páginas** — combinación de `MudTabs` con `NavigationManager`:
+
+```razor
+@inject NavigationManager Nav
+
+<MudTabs Outlined="true" ActivePanelIndex="_activeIndex"
+         ActivePanelIndexChanged="OnTabChanged">
+    <MudTabPanel Text="Inicio" />
+    <MudTabPanel Text="Clientes" />
+    <MudTabPanel Text="Config" />
+</MudTabs>
+
+<div class="pa-4">
+    @Body
+</div>
+
+@code {
+    [Parameter] public RenderFragment? Body { get; set; }
+
+    private string[] _rutas = new[] { "/", "/clientes", "/config" };
+    private int _activeIndex;
+
+    protected override void OnInitialized()
+    {
+        var path = "/" + new Uri(Nav.Uri).AbsolutePath.Trim('/');
+        _activeIndex = Array.FindIndex(_rutas, r => r == path);
+        if (_activeIndex < 0) _activeIndex = 0;
+    }
+
+    private void OnTabChanged(int index)
+    {
+        _activeIndex = index;
+        Nav.NavigateTo(_rutas[index]);
+    }
+}
+```
+
+Para una **bottom tab bar** estilo mobile, MudBlazor no tiene un control específico
+(`MudAppBar Bottom="true"` con `MudIconButton` es lo más cercano), pero como se trata
+de una app *Hybrid* que vive dentro de un WebView, lo más habitual es seguir el patrón
+web de tabs arriba o un `MudDrawer` lateral.
+
+#### 5.1.3 Tabla resumen
+
+| MAUI puro | Bootstrap (Hybrid) | MudBlazor (Hybrid) |
+|---|---|---|
+| `FlyoutPage` / `Shell` con `FlyoutItem` | `offcanvas` + `NavLink`s, manejado con estado | `MudDrawer` (`Temporary` o `Responsive`) + `MudNavMenu` |
+| `TabbedPage` (tabs = páginas) | `nav nav-tabs` con `NavLink` y `ActiveClass="active"` | `MudTabs` + `NavigationManager` (sincronizar índice ↔ ruta) |
+| Tabs internas a una página | `nav nav-tabs` controladas por estado local | `MudTabs` + `MudTabPanel` (sin código adicional) |
+| Bottom tab bar (móvil) | `<nav class="navbar fixed-bottom">` manual | `MudAppBar Bottom="true"` con `MudIconButton`s |
+| Master-detail clásico | Layout 2 columnas con `col-md-3` + `col-md-9` y `NavLink` | `MudDrawer` `Variant="DrawerVariant.Persistent"` + contenido en `MudMainContent` |
+
+> 💡 En Hybrid, el "host MAUI" (`MainPage.xaml` con el `BlazorWebView`) sigue siendo
+> **una sola página**. Lo que en MAUI puro era `FlyoutPage` o `TabbedPage` deja de ser
+> una jerarquía de páginas y pasa a ser una decisión de **layout dentro del WebView**.
+
 ---
 
 ## 6. Layouts (contenedores)

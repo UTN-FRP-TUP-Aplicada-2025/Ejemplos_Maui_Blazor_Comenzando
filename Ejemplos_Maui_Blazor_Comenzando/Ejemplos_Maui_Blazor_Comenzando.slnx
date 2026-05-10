@@ -1,11 +1,13 @@
 <Solution>
-  <Folder Name="/AnatomiaProyectoBlazor/">
-    <Project Path="AnatomiaProyecto/Ejemplo_HolaMundo/Ejemplo_HolaMundo.csproj">
-      <Deploy Solution="Debug|*" />
-    </Project>
+  <Folder Name="/AnatomiaProyectoBlazor/" />
+  <Folder Name="/AnatomiaProyectoBlazor/bootstrap/">
+    <Project Path="AnatomiaProyecto/bs/BS_HolaMundo/BS_HolaMundo.csproj" Id="14a7cda9-a1d0-45d7-a16f-dc333b644769" />
   </Folder>
-  <Folder Name="/AnatomiaProyectoBlazor/Docs/">
-    <File Path="AnatomiaProyecto/Ejemplo_Docs/Readme.md" />
+  <Folder Name="/AnatomiaProyectoBlazor/maui/">
+    <Project Path="AnatomiaProyecto/maui/Maui_HolaMundo/Maui_HolaMundo.csproj" Id="e935f3d6-9155-4508-a08b-0ed2f1a2eb9c" />
+  </Folder>
+  <Folder Name="/AnatomiaProyectoBlazor/mudblazor/">
+    <Project Path="AnatomiaProyecto/mb/MB_HolaMundo/MB_HolaMundo.csproj" Id="5a770533-2688-48a9-b61a-00aecc8c0241" />
   </Folder>
   <Folder Name="/Docs/">
     <File Path="../README.md" />
@@ -38,6 +40,8 @@
     </Project>
   </Folder>
   <Folder Name="/Views/mudblazor/">
-    <Project Path="Views/mudblazor/Ejemplo_MB_Views/Ejemplo_MB_Views.csproj" Id="15ec2e1f-62b1-4b50-b8e3-54e9dc11d1d5" />
+    <Project Path="Views/mudblazor/Ejemplo_MB_Views/Ejemplo_MB_Views.csproj" Id="15ec2e1f-62b1-4b50-b8e3-54e9dc11d1d5">
+      <Deploy Solution="Debug|*" />
+    </Project>
   </Folder>
 </Solution>
