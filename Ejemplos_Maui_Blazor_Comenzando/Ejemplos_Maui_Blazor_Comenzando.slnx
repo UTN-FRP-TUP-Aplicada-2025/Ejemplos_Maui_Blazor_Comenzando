@@ -8,6 +8,7 @@
     <File Path="AnatomiaProyecto/Ejemplo_Docs/Readme.md" />
   </Folder>
   <Folder Name="/Docs/">
+    <File Path="../README.md" />
     <File Path="Docs/guia-maui-blazor-hybrid.md" />
     <File Path="Docs/temas.md" />
   </Folder>
@@ -27,6 +28,16 @@
   </Folder>
   <Folder Name="/Views/" />
   <Folder Name="/Views/bootstrap/">
-    <Project Path="Views/bootstrap/Ejemplo_BS_Views/Ejemplo_BS_Views.csproj" Id="78de8a1a-8212-4de9-aaad-8b4367a0c6e1" />
+    <Project Path="Views/bootstrap/Ejemplo_BS_Views/Ejemplo_BS_Views.csproj" Id="78de8a1a-8212-4de9-aaad-8b4367a0c6e1">
+      <Deploy Solution="Debug|*" />
+    </Project>
+  </Folder>
+  <Folder Name="/Views/maui/">
+    <Project Path="Views/maui/Ejemplo_Maui_Views/Ejemplo_Maui_Views.csproj" Id="d6558177-9e09-43c0-a0c3-b2dfb7cb0fcb">
+      <Deploy Solution="Debug|*" />
+    </Project>
+  </Folder>
+  <Folder Name="/Views/mudblazor/">
+    <Project Path="Views/mudblazor/Ejemplo_MB_Views/Ejemplo_MB_Views.csproj" Id="15ec2e1f-62b1-4b50-b8e3-54e9dc11d1d5" />
   </Folder>
 </Solution>

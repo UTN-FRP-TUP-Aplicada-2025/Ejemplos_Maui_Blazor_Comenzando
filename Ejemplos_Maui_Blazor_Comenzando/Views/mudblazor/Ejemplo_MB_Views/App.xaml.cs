@@ -1,7 +1,4 @@
-﻿
-using Ejemplo_BS_Views.Pages;
-
-namespace Ejemplo_BS_Views;
+﻿namespace Ejemplo_MB_Views;
 
 public partial class App : Application
 {
@@ -12,6 +9,6 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new MainPage()) { Title = "Ejemplo_BS_Views" };
+        return new Window(new MainPage()) { Title = "Ejemplo_MB_Views" };
     }
 }

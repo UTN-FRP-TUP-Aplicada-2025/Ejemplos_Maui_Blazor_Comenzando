@@ -1,5 +1,207 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+@using Ejemplo_BS_Views.Models
+@inject IJSRuntime JS
+
+<div class="container py-3">
+
+    <!-- Ejemplo Label -->
+    <div class="mb-4">
+        <p>Hello, World!</p>
+    </div>
+
+    <!-- Ejemplo Button -->
+    <div class="mb-4">
+        <p>@mensaje</p>
+        <button class="btn btn-primary" @onclick="OnVerMensajeClicked">Ver Mensaje</button>
+    </div>
+
+    <!-- Ejemplo Entry -->
+    <div class="mb-4">
+        <input type="text" class="form-control mb-2" placeholder="Enter text here" />
+        <input type="date" class="form-control mb-2" />
+        <input type="time" class="form-control mb-2" />
+        <input type="password" class="form-control mb-2" />
+        <input type="url" class="form-control mb-2" />
+    </div>
+
+    <!-- Ejemplo CheckBox -->
+    <div class="mb-4">
+        <p>Texto informativo</p>
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="chkOpcion1" @bind="opcion1Check" />
+            <label class="form-check-label" for="chkOpcion1">Opción 1</label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="chkOpcion2" @bind="opcion2Check" />
+            <label class="form-check-label" for="chkOpcion2">Opción 2</label>
+        </div>
+
+        <p class="mt-2">@resultadoCheckBox</p>
+        <button class="btn btn-primary" @onclick="VerResultadoCheckBox">Ver Selección</button>
+    </div>
+
+    <!-- Ejemplo RadioButton -->
+    <div class="mb-4">
+        <p>Texto informativo</p>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="opciones" id="rbtn1"
+                   value="1" @onchange="@(() => opcionRadio = 1)" checked="@(opcionRadio == 1)" />
+            <label class="form-check-label" for="rbtn1">Opción 1</label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="opciones" id="rbtn2"
+                   value="2" @onchange="@(() => opcionRadio = 2)" checked="@(opcionRadio == 2)" />
+            <label class="form-check-label" for="rbtn2">Opción 2</label>
+        </div>
+
+        <p class="mt-2">@resultadoRadioButton</p>
+        <button class="btn btn-primary" @onclick="VerResultadoRadioButton">Ver Selección</button>
+
+        <div class="form-check mt-2">
+            <input class="form-check-input" type="radio" name="opciones" id="rbtn3"
+                   value="3" @onchange="@(() => opcionRadio = 3)" checked="@(opcionRadio == 3)" />
+            <label class="form-check-label" for="rbtn3">Opción 3</label>
+        </div>
+    </div>
+
+    <!-- Ejemplo CollectionView -> list-group de Bootstrap -->
+    <div class="mb-4">
+        @if (!string.IsNullOrEmpty(headerLista))
+        {
+            <p class="fw-bold mb-1">@headerLista</p>
+        }
+
+        <div class="list-group">
+            @foreach (var p in lista)
+            {
+                <button type="button"
+                        class="list-group-item list-group-item-action @(seleccionadoLista == p ? "active" : "")"
+                        @onclick="() => seleccionadoLista = p">
+                    <div class="fw-bold">@p.Id</div>
+                    <div style="font-size:16px">@p.Nombre</div>
+                </button>
+            }
+        </div>
+
+        @if (!string.IsNullOrEmpty(footerLista))
+        {
+            <p class="mt-1">@footerLista</p>
+        }
+
+        <div class="d-flex gap-2 mt-2">
+            <button class="btn btn-primary" @onclick="VerLista">Ver lista</button>
+            <button class="btn btn-secondary" @onclick="VerSeleccionLista">Ver Selección</button>
+        </div>
+    </div>
+
+    <!-- Ejemplo Picker -> select de Bootstrap -->
+    <div class="mb-4">
+        <select class="form-select" @bind="idPersonaPicker">
+            <option value="0">Seleccione una opcion</option>
+            @foreach (var p in personasPicker)
+            {
+                <option value="@p.Id">@p.Nombre</option>
+            }
+        </select>
+
+        <p class="mt-2">@resultadoPicker</p>
+        <button class="btn btn-primary" @onclick="VerSeleccionPicker">Ver Selección</button>
+    </div>
+
+    <!-- Ejemplo Image -->
+    <div class="mb-4">
+        <img src="images/la_ratona_en_aplicada.png" class="img-fluid w-100" alt="Imagen" />
+    </div>
+
+</div>
+
+@code {
+    // Mensaje
+    private string mensaje = string.Empty;
+
+    // CheckBox
+    private bool opcion1Check;
+    private bool opcion2Check;
+    private string resultadoCheckBox = string.Empty;
+
+    // RadioButton
+    private int opcionRadio;
+    private string resultadoRadioButton = string.Empty;
+
+    // Lista (CollectionView)
+    private List<Persona> lista = new();
+    private string headerLista = string.Empty;
+    private string footerLista = string.Empty;
+    private Persona? seleccionadoLista;
+
+    // Picker
+    private List<Persona> personasPicker = new()
+    {
+        new Persona { Id = 1, Nombre = "Rocio" },
+        new Persona { Id = 2, Nombre = "Eduardo" },
+        new Persona { Id = 3, Nombre = "Griselda" },
+    };
+    private int idPersonaPicker;
+    private string resultadoPicker = string.Empty;
+
+    private void OnVerMensajeClicked()
+    {
+        mensaje = "Hola mundo";
+    }
+
+    private void VerResultadoCheckBox()
+    {
+        if (opcion1Check && opcion2Check)
+            resultadoCheckBox = "Opción 1 y 2 seleccionadas";
+        else if (opcion1Check)
+            resultadoCheckBox = "Opción 1 seleccionada";
+        else if (opcion2Check)
+            resultadoCheckBox = "Opción 2 seleccionada";
+        else
+            resultadoCheckBox = "Ninguna opción seleccionada";
+    }
+
+    private void VerResultadoRadioButton()
+    {
+        // (Corrijo el bug del original: la segunda condición comparaba rbtnOpcion1 dos veces)
+        resultadoRadioButton = opcionRadio switch
+        {
+            1 => "Opción 1 seleccionada",
+            2 => "Opción 2 seleccionada",
+            3 => "Opción 3 seleccionada",
+            _ => "Ninguna opción seleccionada"
+        };
+    }
+
+    private void VerLista()
+    {
+        lista = new List<Persona>
+        {
+            new Persona { Id = 1, Nombre = "Rocio" },
+            new Persona { Id = 2, Nombre = "Eduardo" },
+            new Persona { Id = 3, Nombre = "Griselda" },
+        };
+
+        headerLista = "Listado: ";
+        footerLista = lista.Count.ToString();
+    }
+
+    private async Task VerSeleccionLista()
+    {
+        if (seleccionadoLista is not null)
+            await JS.InvokeVoidAsync("alert", $"selectedItem: {seleccionadoLista.Nombre}");
+    }
+
+    private async Task VerSeleccionPicker()
+    {
+        var sel = personasPicker.FirstOrDefault(p => p.Id == idPersonaPicker);
+        if (sel is not null)
+            await JS.InvokeVoidAsync("alert", $"selectedItem: {sel.Nombre}");
+    }
+}

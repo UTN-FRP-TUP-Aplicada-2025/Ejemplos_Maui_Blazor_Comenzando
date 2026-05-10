@@ -1,0 +1,234 @@
+﻿@page "/"
+
+@using Ejemplo_MB_Views.Models
+
+@using MudBlazor
+
+@inject IDialogService Dialog
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="py-4">
+
+    <MudStack Spacing="6">
+
+        <!-- Ejemplo Label -->
+        <MudText>Hello, World!</MudText>
+
+        <!-- Ejemplo Button -->
+        <MudStack Spacing="2">
+            <MudText>@mensaje</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                       OnClick="OnVerMensajeClicked">
+                Ver Mensaje
+            </MudButton>
+        </MudStack>
+
+        <!-- Ejemplo Entry -->
+        <MudStack Spacing="2">
+            <MudTextField T="string" Label="Enter text here" Variant="Variant.Outlined" />
+
+            <MudDatePicker Label="Fecha" Variant="Variant.Outlined" @bind-Date="fechaSeleccionada" />
+
+            <MudTimePicker Label="Hora" Variant="Variant.Outlined" @bind-Time="horaSeleccionada" />
+
+            <MudTextField T="string" Label="Password" Variant="Variant.Outlined"
+                          InputType="InputType.Password" />
+
+            <MudTextField T="string" Label="Url" Variant="Variant.Outlined"
+                          InputType="InputType.Url" />
+        </MudStack>
+
+        <!-- Ejemplo CheckBox -->
+        <MudStack Spacing="2">
+            <MudText>Texto informativo</MudText>
+
+            <MudCheckBox T="bool" @bind-Value="opcion1Check" Label="Opción 1" />
+            <MudCheckBox T="bool" @bind-Value="opcion2Check" Label="Opción 2" />
+
+            <MudText>@resultadoCheckBox</MudText>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                       OnClick="VerResultadoCheckBox">
+                Ver Selección
+            </MudButton>
+        </MudStack>
+
+        <!-- Ejemplo RadioButton -->
+        <MudStack Spacing="2">
+            <MudText>Texto informativo</MudText>
+
+            <MudRadioGroup T="int" @bind-Value="opcionRadio">
+                <MudRadio T="int" Value="1" Color="Color.Primary">Opción 1</MudRadio>
+                <MudRadio T="int" Value="2" Color="Color.Primary">Opción 2</MudRadio>
+                <MudRadio T="int" Value="3" Color="Color.Primary">Opción 3</MudRadio>
+            </MudRadioGroup>
+
+            <MudText>@resultadoRadioButton</MudText>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                       OnClick="VerResultadoRadioButton">
+                Ver Selección
+            </MudButton>
+        </MudStack>
+
+        <!-- Ejemplo CollectionView -> MudList -->
+        <MudStack Spacing="2">
+
+            @if (!string.IsNullOrEmpty(headerLista))
+            {
+                <MudText Typo="Typo.subtitle1"><b>@headerLista</b></MudText>
+            }
+
+            <MudList T="Persona" @bind-SelectedValue="seleccionadoLista" SelectionMode="SelectionMode.SingleSelection">
+                @foreach (var p in lista)
+                {
+                    <MudListItem T="Persona" Value="@p">
+                        <MudPaper Elevation="0" Outlined="true" Class="pa-2">
+                            <MudText Typo="Typo.body1"><b>@p.Id</b></MudText>
+                            <MudText Typo="Typo.body1">@p.Nombre</MudText>
+                        </MudPaper>
+                    </MudListItem>
+                }
+            </MudList>
+
+            @if (!string.IsNullOrEmpty(footerLista))
+            {
+                <MudText Typo="Typo.caption">@footerLista</MudText>
+            }
+
+            <MudStack Row="true" Spacing="2">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                           OnClick="VerLista">
+                    Ver lista
+                </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary"
+                           OnClick="VerSeleccionLista">
+                    Ver Selección
+                </MudButton>
+            </MudStack>
+        </MudStack>
+
+        <!-- Ejemplo Picker -> MudSelect -->
+        <MudStack Spacing="2">
+            <MudSelect T="Persona" Label="Seleccione una opcion"
+                       Variant="Variant.Outlined"
+                       @bind-Value="personaPickerSeleccionada"
+                       ToStringFunc="@(p => p?.Nombre)">
+                @foreach (var p in personasPicker)
+                {
+                    <MudSelectItem T="Persona" Value="@p">@p.Nombre</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudText>@resultadoPicker</MudText>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                       OnClick="VerSeleccionPicker">
+                Ver Selección
+            </MudButton>
+        </MudStack>
+
+        <!-- Ejemplo Image -->
+        <MudImage Src="images/la_ratona_en_aplicada.png"
+                  Alt="Imagen"
+                  Fluid="true"
+                  ObjectFit="ObjectFit.Fill" />
+
+    </MudStack>
+</MudContainer>
+
+@code {
+    // Mensaje
+    private string mensaje = string.Empty;
+
+    // Entry de fecha/hora
+    private DateTime? fechaSeleccionada;
+    private TimeSpan? horaSeleccionada;
+
+    // CheckBox
+    private bool opcion1Check;
+    private bool opcion2Check;
+    private string resultadoCheckBox = string.Empty;
+
+    // RadioButton
+    private int opcionRadio;
+    private string resultadoRadioButton = string.Empty;
+
+    // Lista (CollectionView)
+    private List<Persona> lista = new();
+    private string headerLista = string.Empty;
+    private string footerLista = string.Empty;
+    private Persona? seleccionadoLista;
+
+    // Picker
+    private List<Persona> personasPicker = new()
+    {
+        new Persona { Id = 1, Nombre = "Rocio" },
+        new Persona { Id = 2, Nombre = "Eduardo" },
+        new Persona { Id = 3, Nombre = "Griselda" },
+    };
+    private Persona? personaPickerSeleccionada;
+    private string resultadoPicker = string.Empty;
+
+    private void OnVerMensajeClicked()
+    {
+        mensaje = "Hola mundo";
+    }
+
+    private void VerResultadoCheckBox()
+    {
+        if (opcion1Check && opcion2Check)
+            resultadoCheckBox = "Opción 1 y 2 seleccionadas";
+        else if (opcion1Check)
+            resultadoCheckBox = "Opción 1 seleccionada";
+        else if (opcion2Check)
+            resultadoCheckBox = "Opción 2 seleccionada";
+        else
+            resultadoCheckBox = "Ninguna opción seleccionada";
+    }
+
+    private void VerResultadoRadioButton()
+    {
+        resultadoRadioButton = opcionRadio switch
+        {
+            1 => "Opción 1 seleccionada",
+            2 => "Opción 2 seleccionada",
+            3 => "Opción 3 seleccionada",
+            _ => "Ninguna opción seleccionada"
+        };
+    }
+
+    private void VerLista()
+    {
+        lista = new List<Persona>
+        {
+            new Persona { Id = 1, Nombre = "Rocio" },
+            new Persona { Id = 2, Nombre = "Eduardo" },
+            new Persona { Id = 3, Nombre = "Griselda" },
+        };
+
+        headerLista = "Listado: ";
+        footerLista = lista.Count.ToString();
+    }
+
+    private async Task VerSeleccionLista()
+    {
+        if (seleccionadoLista is not null)
+        {
+            await Dialog.ShowMessageBoxAsync(
+                "CollectionView",
+                $"selectedItem: {seleccionadoLista.Nombre}",
+                yesText: "OK");
+        }
+    }
+
+    private async Task VerSeleccionPicker()
+    {
+        if (personaPickerSeleccionada is not null)
+        {
+            await Dialog.ShowMessageBoxAsync(
+                "Picker",
+                $"selectedItem: {personaPickerSeleccionada.Nombre}",
+                yesText: "OK");
+        }
+    }
+}

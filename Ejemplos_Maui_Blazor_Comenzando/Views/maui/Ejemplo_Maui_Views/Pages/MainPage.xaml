@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Ejemplo_Maui_Views.Pages.MainPage"
+             xmlns:local="clr-namespace:Ejemplo_Maui_Views"
+             xmlns:pages="clr-namespace:Ejemplo_Maui_Views.Pages"
+             xmlns:models="clr-namespace:Ejemplo_Maui_Views.Models">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,0" Spacing="25">
+
+            <!--Ejemplo Label-->
+            <StackLayout>
+                <Label Text="Hello, World!"  />
+            </StackLayout>
+            <!--Fin Ejemplo-->
+
+            <!--Ejemplo Button-->
+            <StackLayout>
+                <Label x:Name="lbMensaje" Text=""  />
+                <Button Text="Ver Mensaje" Clicked="OnVerMensajeClicked"/>
+            </StackLayout>
+            <!--Fin Ejemplo-->
+
+            <!--Ejemplo Entry-->
+            <StackLayout>
+                <Entry Placeholder="Enter text here" />
+
+                <Entry Keyboard="Date"/>
+
+                <Entry Keyboard="Time"/>
+
+                <Entry Keyboard="Password"/>
+
+                <Entry Keyboard="Url"/>
+            </StackLayout>
+            <!--Fin Ejemplo-->
+
+            <!--Ejemplo de checkbox-->
+            <StackLayout>
+
+                <StackLayout>
+                    <Label Text="Texto informativo" />
+                    <HorizontalStackLayout>
+                        <CheckBox x:Name="chkOpcion1" />
+                        <Label Text="Opción 1"  />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <CheckBox x:Name="chkOpcion2"/>
+                        <Label Text="Opción 2"  />
+                    </HorizontalStackLayout>
+                </StackLayout>
+
+                <Label x:Name="lbResultadoCheckBox" Text=""  />
+
+                <Button Text="Ver Selección" Clicked="btnResultadoCheckBox_Clicked"/>
+            </StackLayout>
+            <!--Fin del ejemplo-->
+
+            <!--Ejemplo de radio button-->
+            <StackLayout>
+                <StackLayout>
+                    <Label Text="Texto informativo" />
+                    <RadioButton x:Name="rbtnOpcion1" Content="Opción 1" />
+
+                    <RadioButton x:Name="rbtnOpcion2" Content="Opción 2" />
+                </StackLayout>
+
+                <Label x:Name="lbResultadoRadioButton" Text=""  />
+
+                <Button Text="Ver Selección" Clicked="btnResultadoRadioButton_Clicked"/>
+                <!--Fin del ejemplo-->
+
+                <RadioButton x:Name="rbtnOpcion3" Content="Opción 3" />
+            </StackLayout>
+
+            <!--Ejemplo listView-->
+            <StackLayout>
+                <CollectionView x:Name="lvLista" SelectionMode="Single">
+
+                    <CollectionView.HeaderTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Label Text="{Binding .}"/>
+                        </DataTemplate>
+                    </CollectionView.HeaderTemplate>
+
+                    <CollectionView.ItemTemplate InputTransparent="True">
+                        <DataTemplate x:DataType="models:Persona" >
+                            <Border Stroke="LightGray" StrokeThickness="1" Padding="10" Margin="5" InputTransparent="True" >
+                                <StackLayout InputTransparent="True">
+                                    <Label Text="{Binding Id}"  FontAttributes="Bold"/>
+                                    <Label Text="{Binding Nombre}"  FontSize="16"/>
+                                </StackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <CollectionView.FooterTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Label Text="{Binding .}"/>
+                        </DataTemplate>
+                    </CollectionView.FooterTemplate>
+
+                </CollectionView>
+
+                <HorizontalStackLayout>
+                    <Button Text="Ver lista" Clicked="btnVerLista_Clicked"/>
+                    <Button Text="Ver Selección" Clicked="btnVerSeleccion_Clicked"/>
+                </HorizontalStackLayout>
+            </StackLayout>
+            <!-- Fin ejemplo-->
+
+            <!--Ejemplo Label-->
+            <StackLayout>
+                <Picker x:Name="pkrPersonas" Title="Seleccione una opcion" ItemDisplayBinding="{Binding Nombre}">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type models:Persona}">
+                            <models:Persona Id="1" Nombre="Rocio"/>
+                            <models:Persona Id="2" Nombre="Eduardo"/>
+                            <models:Persona Id="3" Nombre="Griselda"/>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <Label x:Name="lbVerSeleccionPicker" Text=""  />
+                <Button Text="Ver Selección" Clicked="btnVerSeleccionPicker_Clicked"/>
+            </StackLayout>
+            <!--Fin Ejemplo-->
+
+            <!--Ejemplo Label-->
+            <StackLayout>
+                <Image Source="la_ratona_en_aplicada.png" Aspect="Fill"/>
+            </StackLayout>
+            <!--Fin Ejemplo-->
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
