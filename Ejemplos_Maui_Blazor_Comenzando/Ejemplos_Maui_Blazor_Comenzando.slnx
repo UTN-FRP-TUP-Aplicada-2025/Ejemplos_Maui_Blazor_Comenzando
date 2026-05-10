@@ -7,24 +7,26 @@
   <Folder Name="/AnatomiaProyectoBlazor/Docs/">
     <File Path="AnatomiaProyecto/Ejemplo_Docs/Readme.md" />
   </Folder>
+  <Folder Name="/Docs/">
+    <File Path="Docs/guia-maui-blazor-hybrid.md" />
+    <File Path="Docs/temas.md" />
+  </Folder>
   <Folder Name="/Layout/" />
   <Folder Name="/Layout/bootstrap/">
-    <Project Path="Layout/bootstrap/Ejemplo_BootStrap_Layout/Ejemplo_BootStrap_Layout.csproj">
+    <Project Path="Layout/bootstrap/Ejemplo_BS_Layout/Ejemplo_BS_Layout.csproj">
       <Deploy Solution="Debug|*" />
     </Project>
-  </Folder>
-  <Folder Name="/Layout/Docs/">
-    <File Path="Layout/Ejemplo_Docs/layout_maui_Bootstrap_mudblazor.md" />
   </Folder>
   <Folder Name="/Layout/maui/">
-    <Project Path="Layout/maui/Ejemplo_Maui_Layout/Ejemplo_Maui_Layout.csproj" Id="3ea8eef9-8c1b-47d1-9343-814315d67abe" />
-  </Folder>
-  <Folder Name="/Layout/mudblazor/">
-    <Project Path="Layout/mudblazor/Ejemplo_MB_Layout/Ejemplo_MB_Layout.csproj" Id="b7f551a3-33db-4140-be34-ea54008d33f6" />
-  </Folder>
-  <Folder Name="/Views/">
-    <Project Path="Views/Ejemplo_Views/Ejemplo_Views.csproj" Id="58730099-6435-4947-8604-ef77fb80fcdc">
+    <Project Path="Layout/maui/Ejemplo_Maui_Layout/Ejemplo_Maui_Layout.csproj" Id="3ea8eef9-8c1b-47d1-9343-814315d67abe">
       <Deploy Solution="Debug|*" />
     </Project>
+  </Folder>
+  <Folder Name="/Layout/mudblazor/">
+    <Project Path="Layout/mudblazor/Ejemplo_MB_Layout/Ejemplo_MB_Layout.csproj" />
+  </Folder>
+  <Folder Name="/Views/" />
+  <Folder Name="/Views/bootstrap/">
+    <Project Path="Views/bootstrap/Ejemplo_BS_Views/Ejemplo_BS_Views.csproj" Id="78de8a1a-8212-4de9-aaad-8b4367a0c6e1" />
   </Folder>
 </Solution>

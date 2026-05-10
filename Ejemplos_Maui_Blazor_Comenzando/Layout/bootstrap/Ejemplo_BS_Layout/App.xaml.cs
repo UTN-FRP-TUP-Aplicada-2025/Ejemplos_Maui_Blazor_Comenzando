@@ -1,6 +1,4 @@
-﻿using Ejemplo_MB_Layout.Pages;
-
-namespace Ejemplo_MB_Layout;
+﻿namespace Ejemplo_BS_Layout;
 
 public partial class App : Application
 {
@@ -11,6 +9,6 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new MainPage()) { Title = "Ejemplo_MB_Layout" };
+        return new Window(new MainPage()) { Title = "Ejemplo_Bootstrap_Layout" };
     }
 }
